@@ -1,13 +1,14 @@
 let allItems = [];
 let selectedMajor = '';
-let activeDetailItem = null; // Menampung data barang yang sedang aktif dibuka di modal detail
+let activeDetailItem = null;
 let currentUser = JSON.parse(localStorage.getItem('operin_user')) || null;
 
-// --- 1. Custom Glowing Cursor Follower ---
+// Custom Glowing Cursor Follower
 const cursorDot = document.getElementById('cursorDot');
 const cursorOutline = document.getElementById('cursorOutline');
 
 window.addEventListener('mousemove', (e) => {
+  if (!cursorDot || !cursorOutline) return;
   const posX = e.clientX;
   const posY = e.clientY;
 
@@ -28,25 +29,29 @@ function attachCursorHoverEffect() {
   });
 }
 
-// --- 2. Dark / Light Mode Toggle ---
+// Dark / Light Mode Toggle
 function toggleTheme() {
   const current = document.documentElement.getAttribute('data-theme');
   const target = current === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', target);
-  document.getElementById('btnThemeToggle').innerText = target === 'dark' ? '☀️' : '🌓';
+  const btn = document.getElementById('btnThemeToggle');
+  if (btn) btn.innerText = target === 'dark' ? '☀️' : '🌓';
   localStorage.setItem('operin_theme', target);
 }
 
 const savedTheme = localStorage.getItem('operin_theme');
 if (savedTheme) {
   document.documentElement.setAttribute('data-theme', savedTheme);
-  document.getElementById('btnThemeToggle').innerText = savedTheme === 'dark' ? '☀️' : '🌓';
+  const btn = document.getElementById('btnThemeToggle');
+  if (btn) btn.innerText = savedTheme === 'dark' ? '☀️' : '🌓';
 }
 
-// --- 3. Auth UI Management ---
+// Auth UI
 function updateAuthButtonUI() {
   const authBtn = document.getElementById('btnGoogleAuth');
   const authText = document.getElementById('authText');
+  if (!authBtn || !authText) return;
+
   if (currentUser) {
     authText.innerText = currentUser.name.split(' ')[0] + ` (${currentUser.grade})`;
     authBtn.style.borderColor = "var(--primary)";
@@ -85,16 +90,22 @@ function handleRegisterUser(e) {
   alert(`Profil berhasil didaftarkan!\nSelamat datang di Operin SMKN 8 Jakarta, ${currentUser.name}.`);
 }
 
-// --- 4. Database Fetching & Rendering ---
+// Load Data Khusus GitHub Pages (Membaca items.json)
 async function loadItems() {
   try {
-    const response = await fetch('get_items.php');
-    allItems = await response.json();
+    const localSaved = localStorage.getItem('operin_custom_items');
+    let extraItems = localSaved ? JSON.parse(localSaved) : [];
+
+    const response = await fetch('items.json');
+    if (!response.ok) throw new Error('items.json gagal dimuat');
+    const baseItems = await response.json();
+
+    allItems = [...extraItems, ...baseItems];
     renderItems();
   } catch (err) {
     document.getElementById('catalogGrid').innerHTML = `
       <div style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 40px;">
-        Gagal tersambung ke database MySQL. Pastikan XAMPP Apache & MySQL aktif.
+        Gagal memuat barang. Pastikan file items.json sudah dibuat di repositori GitHub.
       </div>`;
   }
 }
@@ -125,9 +136,9 @@ function renderItems() {
   });
 
   if (sort === 'lowest') {
-    filtered.sort((a, b) => parseInt(a.price.replace(/[^0-9]/g, '') || 0) - parseInt(b.price.replace(/[^0-9]/g, '') || 0));
+    filtered.sort((a, b) => parseInt(String(a.price).replace(/[^0-9]/g, '') || 0) - parseInt(String(b.price).replace(/[^0-9]/g, '') || 0));
   } else if (sort === 'highest') {
-    filtered.sort((a, b) => parseInt(b.price.replace(/[^0-9]/g, '') || 0) - parseInt(a.price.replace(/[^0-9]/g, '') || 0));
+    filtered.sort((a, b) => parseInt(String(b.price).replace(/[^0-9]/g, '') || 0) - parseInt(String(a.price).replace(/[^0-9]/g, '') || 0));
   }
 
   document.getElementById('itemCount').innerText = filtered.length;
@@ -172,7 +183,6 @@ function renderItems() {
   attachCursorHoverEffect();
 }
 
-// --- 5. 3D Tilt Physics Engine ---
 function handleTilt(e, cardWrap) {
   const rect = cardWrap.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -190,21 +200,27 @@ function resetTilt(cardWrap) {
   cardWrap.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
 }
 
-// --- 6. Form, Modal & Detail Handlers ---
 function togglePriceFields() {
   const scheme = document.getElementById('itemScheme').value;
   document.getElementById('fieldPrice').style.display = scheme === 'Berbayar' ? 'block' : 'none';
   document.getElementById('fieldBarter').style.display = scheme === 'Barter' ? 'block' : 'none';
 }
 
-function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+function openModal(id) { 
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'flex'; 
+}
+
+function closeModal(id) { 
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none'; 
+}
 
 function openDetail(id) {
   const item = allItems.find(x => x.id === id);
   if (!item) return;
 
-  activeDetailItem = item; // Simpan barang yang sedang dilihat untuk keperluan booking / WhatsApp
+  activeDetailItem = item;
 
   document.getElementById('detTitle').innerText = item.title;
   document.getElementById('detMajor').innerText = item.major;
@@ -233,7 +249,6 @@ function openDetail(id) {
   openModal('modalDetail');
 }
 
-// --- 7. Handler Tombol Booking & Direct WhatsApp ke Penjual ---
 function handleBooking() {
   if (!currentUser) {
     alert('Silakan masuk atau daftar akun siswa terlebih dahulu!');
@@ -252,11 +267,8 @@ function handleAmbilWA() {
     return;
   }
 
-  // Gunakan nomor HP penjual yang tersimpan di database, jika kosong fallback ke no Operin
   let targetPhone = activeDetailItem.sellerPhone || '083171164721';
-  
-  // Format nomor telepon menjadi standar internasional WhatsApp (628...)
-  targetPhone = targetPhone.replace(/[^0-9]/g, '');
+  targetPhone = String(targetPhone).replace(/[^0-9]/g, '');
   if (targetPhone.startsWith('0')) {
     targetPhone = '62' + targetPhone.slice(1);
   }
@@ -276,13 +288,11 @@ function handleAmbilWA() {
     `📞 *No. WhatsApp:* ${currentUser.phone}%0A%0A` +
     `Apakah alat praktiknya masih ada? Bisa janjian ketemuan di lokasi COD saat jam istirahat nanti? Terima kasih!`;
 
-  // Buka chat WhatsApp langsung ke nomor penitip/penjual
   window.open(`https://wa.me/${targetPhone}?text=${pesan}`, '_blank');
   closeModal('modalDetail');
 }
 
-// --- 8. Submit Titip Barang Baru (Sertakan sellerPhone otomatis) ---
-async function submitNewItem(e) {
+function submitNewItem(e) {
   e.preventDefault();
   if (!currentUser) {
     alert('Kamu harus mendaftar atau masuk akun terlebih dahulu!');
@@ -290,43 +300,37 @@ async function submitNewItem(e) {
     return;
   }
 
-  const payload = {
+  const newItem = {
+    id: Date.now(),
     title: document.getElementById('itemTitle').value,
     major: document.getElementById('itemMajor').value,
     type: document.getElementById('itemScheme').value,
-    price: document.getElementById('itemPrice').value || '0',
+    price: document.getElementById('itemPrice').value ? 'Rp ' + Number(document.getElementById('itemPrice').value).toLocaleString('id-ID') : 'Rp 0',
     size: document.getElementById('itemSize').value,
     condition: document.getElementById('itemCondition').value,
     minus: document.getElementById('itemMinus').value,
     barterFor: document.getElementById('itemBarter').value,
     cod: document.getElementById('itemCod').value,
-    sellerPhone: currentUser.phone // Mengirim nomor WA aktif siswa yang sedang login
+    photoUrl: '',
+    sellerPhone: currentUser.phone
   };
 
-  try {
-    const res = await fetch('add_item.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const result = await res.json();
-    if (result.status === 'success') {
-      alert('Barang praktik berhasil didaftarkan di katalog Operin SMKN 8 Jakarta!');
-      closeModal('modalAdd');
-      document.getElementById('itemTitle').value = '';
-      loadItems();
-    } else {
-      alert('Gagal menyimpan: ' + result.message);
-    }
-  } catch (err) {
-    alert('Terjadi kesalahan saat menghubungi server.');
-  }
+  const localSaved = localStorage.getItem('operin_custom_items');
+  let currentList = localSaved ? JSON.parse(localSaved) : [];
+  currentList.unshift(newItem);
+  localStorage.setItem('operin_custom_items', JSON.stringify(currentList));
+
+  alert('Barang praktik berhasil didaftarkan di katalog Operin SMKN 8 Jakarta!');
+  closeModal('modalAdd');
+  document.getElementById('itemTitle').value = '';
+  loadItems();
 }
 
-// --- 9. Chat Assistant Drawer ---
 function toggleChat() {
   const card = document.getElementById('chatCard');
-  card.style.display = (card.style.display === 'flex') ? 'none' : 'flex';
+  if (card) {
+    card.style.display = (card.style.display === 'flex') ? 'none' : 'flex';
+  }
 }
 
 function sendChat() {
@@ -349,7 +353,6 @@ function sendChat() {
   }, 500);
 }
 
-// Inisialisasi awal
 updateAuthButtonUI();
 loadItems();
 attachCursorHoverEffect();
