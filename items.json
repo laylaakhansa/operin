@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "title": "Kalkulator Saintifik Casio fx-991EX",
+    "major": "Akuntansi",
+    "type": "Berbayar",
+    "price": "Rp 45.000",
+    "size": "fx-991EX Original",
+    "condition": "Fungsi 100% normal, layar jernih",
+    "minus": "Hanya baret halus di cover belakang",
+    "barterFor": "",
+    "cod": "lab akl lt 2 arah aula",
+    "photoUrl": "https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?auto=format&fit=crop&w=600&q=80",
+    "sellerPhone": "083171164721"
+  },
+  {
+    "id": 2,
+    "title": "Kemeja Putih Magang Kejuruan Pria",
+    "major": "Manajemen Perkantoran",
+    "type": "Barter",
+    "price": "Barter",
+    "size": "Size L",
+    "condition": "Kondisi 95% bersih baru 2x pakai",
+    "minus": "Kebesaran di badan saya",
+    "barterFor": "Mau barter dengan kemeja putih size M",
+    "cod": "resepsionis",
+    "photoUrl": "https://images.unsplash.com/photo-1620012253295-c15c429f66bf?auto=format&fit=crop&w=600&q=80",
+    "sellerPhone": "083171164721"
+  },
+  {
+    "id": 3,
+    "title": "Barcode Scanner USB Praktik Kasir",
+    "major": "Bisnis Retail",
+    "type": "Berbayar",
+    "price": "Rp 50.000",
+    "size": "Laser Handheld USB",
+    "condition": "Sensitivitas scan normal dan cepat",
+    "minus": "Dus sudah tidak ada",
+    "barterFor": "",
+    "cod": "ki hajar dewantara deket business center",
+    "photoUrl": "https://images.unsplash.com/photo-1556742049-0a67e5572293?auto=format&fit=crop&w=600&q=80",
+    "sellerPhone": "083171164721"
+  },
+  {
+    "id": 4,
+    "title": "Flashdisk Sandisk 32GB Berisi Modul RPL",
+    "major": "Rekayasa Perangkat Lunak",
+    "type": "Gratis",
+    "price": "Hibah (Rp0)",
+    "size": "32GB USB 3.0",
+    "condition": "Normal, bersih, bebas bad sector",
+    "minus": "Tutup flashdisk hilang",
+    "barterFor": "",
+    "cod": "lab rpl lt 1 samping ruang guru rpl",
+    "photoUrl": "https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=600&q=80",
+    "sellerPhone": "083171164721"
+  },
+  {
+    "id": 5,
+    "title": "Buku Panduan Ticketing Penerbangan Domestik",
+    "major": "Usaha Layanan Wisata",
+    "type": "Gratis",
+    "price": "Hibah (Rp0)",
+    "size": "Edisi Cetak 2024",
+    "condition": "Halaman lengkap, sudah tersampul mika",
+    "minus": "Ada coretan stabilo di beberapa bab",
+    "barterFor": "",
+    "cod": "lab ulw depan lapangan",
+    "photoUrl": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80",
+    "sellerPhone": "083171164721"
+  }
+]
