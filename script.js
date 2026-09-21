@@ -1,24 +1,20 @@
+// URL Google Apps Script API Operin SMKN 8 Jakarta
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqv7eJF4astEmoOpGVK1-io1eFHal5zFmLoRCwy9BczkGZ0PjAuykRi2y0OT6_Itd9/exec";
+
 let allItems = [];
 let selectedMajor = '';
 let activeDetailItem = null;
 let currentUser = JSON.parse(localStorage.getItem('operin_user')) || null;
 
-// Custom Glowing Cursor Follower
+// --- 1. Custom Glowing Cursor Follower ---
 const cursorDot = document.getElementById('cursorDot');
 const cursorOutline = document.getElementById('cursorOutline');
 
 window.addEventListener('mousemove', (e) => {
   if (!cursorDot || !cursorOutline) return;
-  const posX = e.clientX;
-  const posY = e.clientY;
-
-  cursorDot.style.left = `${posX}px`;
-  cursorDot.style.top = `${posY}px`;
-
-  cursorOutline.animate({
-    left: `${posX}px`,
-    top: `${posY}px`
-  }, { duration: 400, fill: "forwards" });
+  cursorDot.style.left = `${e.clientX}px`;
+  cursorDot.style.top = `${e.clientY}px`;
+  cursorOutline.animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 400, fill: "forwards" });
 });
 
 function attachCursorHoverEffect() {
@@ -29,7 +25,7 @@ function attachCursorHoverEffect() {
   });
 }
 
-// Dark / Light Mode Toggle
+// --- 2. Dark / Light Mode Toggle ---
 function toggleTheme() {
   const current = document.documentElement.getAttribute('data-theme');
   const target = current === 'dark' ? 'light' : 'dark';
@@ -46,7 +42,7 @@ if (savedTheme) {
   if (btn) btn.innerText = savedTheme === 'dark' ? '☀️' : '🌓';
 }
 
-// Auth UI
+// --- 3. Auth UI Management ---
 function updateAuthButtonUI() {
   const authBtn = document.getElementById('btnGoogleAuth');
   const authText = document.getElementById('authText');
@@ -75,37 +71,57 @@ function handleAuthClick() {
   }
 }
 
-function handleRegisterUser(e) {
+// Simpan Akun Siswa ke Google Sheets
+async function handleRegisterUser(e) {
   e.preventDefault();
-  currentUser = {
+  const userData = {
+    action: "register_user",
     name: document.getElementById('regName').value.trim(),
     grade: document.getElementById('regGrade').value,
     major: document.getElementById('regMajor').value,
     email: document.getElementById('regEmail').value.trim(),
     phone: document.getElementById('regPhone').value.trim()
   };
+
+  currentUser = {
+    name: userData.name,
+    grade: userData.grade,
+    major: userData.major,
+    email: userData.email,
+    phone: userData.phone
+  };
   localStorage.setItem('operin_user', JSON.stringify(currentUser));
   updateAuthButtonUI();
   closeModal('modalAuth');
-  alert(`Profil berhasil didaftarkan!\nSelamat datang di Operin SMKN 8 Jakarta, ${currentUser.name}.`);
+  alert(`Menyimpan profil ${currentUser.name}...`);
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData)
+    });
+    alert(`Profil berhasil tersimpan di database Operin!`);
+  } catch (err) {
+    console.error("Gagal sinkron akun:", err);
+  }
 }
 
-// Load Data Khusus GitHub Pages (Membaca items.json)
+// --- 4. Mengambil Katalog Barang dari Google Sheets ---
 async function loadItems() {
+  const grid = document.getElementById('catalogGrid');
+  grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px;">⏳ Memuat katalog perlengkapan dari database...</div>`;
+
   try {
-    const localSaved = localStorage.getItem('operin_custom_items');
-    let extraItems = localSaved ? JSON.parse(localSaved) : [];
-
-    const response = await fetch('items.json');
-    if (!response.ok) throw new Error('items.json gagal dimuat');
-    const baseItems = await response.json();
-
-    allItems = [...extraItems, ...baseItems];
+    const response = await fetch(APPS_SCRIPT_URL);
+    if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets");
+    allItems = await response.json();
     renderItems();
   } catch (err) {
-    document.getElementById('catalogGrid').innerHTML = `
+    grid.innerHTML = `
       <div style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 40px;">
-        Gagal memuat barang. Pastikan file items.json sudah dibuat di repositori GitHub.
+        Gagal memuat katalog dari Google Sheets. Pastikan akses deployment Web App sudah diset ke <b>Anyone</b>.
       </div>`;
   }
 }
@@ -129,7 +145,7 @@ function renderItems() {
   const grid = document.getElementById('catalogGrid');
 
   let filtered = allItems.filter(item => {
-    const matchQ = item.title.toLowerCase().includes(q) || item.cod.toLowerCase().includes(q);
+    const matchQ = (item.title || "").toLowerCase().includes(q) || (item.cod || "").toLowerCase().includes(q);
     const matchMajor = !selectedMajor || item.major === selectedMajor;
     const matchScheme = !scheme || item.type === scheme;
     return matchQ && matchMajor && matchScheme;
@@ -159,11 +175,11 @@ function renderItems() {
 
     const media = item.photoUrl 
       ? `<img src="${item.photoUrl}" alt="${item.title}" class="card-img-cover" loading="lazy">`
-      : `<div class="card-emoji-box">${item.icon || '📦'}</div>`;
+      : `<div class="card-emoji-box">📦</div>`;
 
     return `
       <div class="tilt-card-wrapper" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
-        <div class="card-item-glass" onclick="openDetail(${item.id})">
+        <div class="card-item-glass" onclick="openDetail('${item.id}')">
           <div class="card-media-box">
             <span class="badge-interactive-scheme ${badgeClass}">${badgeText}</span>
             <span class="badge-interactive-cond">${item.condition ? item.condition.slice(0, 18) : 'Kondisi Baik'}</span>
@@ -183,6 +199,7 @@ function renderItems() {
   attachCursorHoverEffect();
 }
 
+// --- 5. 3D Tilt Physics Engine ---
 function handleTilt(e, cardWrap) {
   const rect = cardWrap.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -200,6 +217,7 @@ function resetTilt(cardWrap) {
   cardWrap.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
 }
 
+// --- 6. Modal & Detail Handlers ---
 function togglePriceFields() {
   const scheme = document.getElementById('itemScheme').value;
   document.getElementById('fieldPrice').style.display = scheme === 'Berbayar' ? 'block' : 'none';
@@ -217,7 +235,7 @@ function closeModal(id) {
 }
 
 function openDetail(id) {
-  const item = allItems.find(x => x.id === id);
+  const item = allItems.find(x => String(x.id) === String(id));
   if (!item) return;
 
   activeDetailItem = item;
@@ -235,7 +253,7 @@ function openDetail(id) {
   if (item.photoUrl) {
     mediaBox.innerHTML = `<img src="${item.photoUrl}" alt="${item.title}" style="width:100%;height:220px;object-fit:cover;border-radius:14px;">`;
   } else {
-    mediaBox.innerHTML = `<div style="height:180px;display:flex;align-items:center;justify-content:center;font-size:4rem;background:rgba(0,0,0,0.03);border-radius:14px;">${item.icon || '📦'}</div>`;
+    mediaBox.innerHTML = `<div style="height:180px;display:flex;align-items:center;justify-content:center;font-size:4rem;background:rgba(0,0,0,0.03);border-radius:14px;">📦</div>`;
   }
 
   const barterRow = document.getElementById('detBarterRow');
@@ -249,6 +267,7 @@ function openDetail(id) {
   openModal('modalDetail');
 }
 
+// --- 7. Booking & Direct WhatsApp Penjual ---
 function handleBooking() {
   if (!currentUser) {
     alert('Silakan masuk atau daftar akun siswa terlebih dahulu!');
@@ -292,7 +311,8 @@ function handleAmbilWA() {
   closeModal('modalDetail');
 }
 
-function submitNewItem(e) {
+// --- 8. Simpan Titip Barang Baru ke Google Sheets ---
+async function submitNewItem(e) {
   e.preventDefault();
   if (!currentUser) {
     alert('Kamu harus mendaftar atau masuk akun terlebih dahulu!');
@@ -300,7 +320,8 @@ function submitNewItem(e) {
     return;
   }
 
-  const newItem = {
+  const newItemPayload = {
+    action: "add_item",
     id: Date.now(),
     title: document.getElementById('itemTitle').value,
     major: document.getElementById('itemMajor').value,
@@ -315,22 +336,32 @@ function submitNewItem(e) {
     sellerPhone: currentUser.phone
   };
 
-  const localSaved = localStorage.getItem('operin_custom_items');
-  let currentList = localSaved ? JSON.parse(localSaved) : [];
-  currentList.unshift(newItem);
-  localStorage.setItem('operin_custom_items', JSON.stringify(currentList));
-
-  alert('Barang praktik berhasil didaftarkan di katalog Operin SMKN 8 Jakarta!');
+  alert("Sedang mendaftarkan alat ke database sekolah...");
   closeModal('modalAdd');
-  document.getElementById('itemTitle').value = '';
-  loadItems();
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newItemPayload)
+    });
+
+    alert('Barang praktik berhasil masuk ke database Operin SMKN 8 Jakarta!');
+    document.getElementById('itemTitle').value = '';
+    
+    setTimeout(() => {
+      loadItems();
+    }, 1200);
+  } catch (err) {
+    alert('Gagal menghubungi database Google Sheets.');
+  }
 }
 
+// --- 9. Chat Assistant Drawer ---
 function toggleChat() {
   const card = document.getElementById('chatCard');
-  if (card) {
-    card.style.display = (card.style.display === 'flex') ? 'none' : 'flex';
-  }
+  if (card) card.style.display = (card.style.display === 'flex') ? 'none' : 'flex';
 }
 
 function sendChat() {
@@ -353,6 +384,7 @@ function sendChat() {
   }, 500);
 }
 
+// Inisialisasi awal saat script dimuat
 updateAuthButtonUI();
 loadItems();
 attachCursorHoverEffect();
