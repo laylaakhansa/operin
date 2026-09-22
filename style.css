@@ -1064,3 +1064,216 @@ body {
   display: flex;
   gap: 8px;
 }
+/* ============================================================
+   RESPONSIVE DESIGN KHUSUS MOBILE (iPhone 14/15/16, Samsung, dll)
+   ============================================================ */
+
+/* 1. Matikan Custom Cursor di Perangkat Layar Sentuh */
+@media (hover: none) and (pointer: coarse) {
+  .custom-cursor-dot,
+  .custom-cursor-outline {
+    display: none !important;
+  }
+  * {
+    cursor: auto !important;
+  }
+}
+
+/* 2. Adaptasi Safe-Area iPhone (Dynamic Island & Home Indicator Bar) */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* 3. Breakpoint Tablet & Smartphone Standar (Lebar <= 768px) */
+@media screen and (max-width: 768px) {
+  /* Navbar Rapi Dua Tingkat */
+  .nav-header {
+    top: 8px;
+    padding: 0 12px;
+  }
+  .nav-glass {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 
+      "brand buttons"
+      "search search";
+    row-gap: 12px;
+    column-gap: 8px;
+    padding: 12px 14px;
+    border-radius: 20px;
+  }
+  .brand-link {
+    grid-area: brand;
+  }
+  .brand-title h1 {
+    font-size: 1.2rem;
+  }
+  .brand-badge-logo {
+    width: 36px;
+    height: 36px;
+  }
+  .nav-buttons {
+    grid-area: buttons;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+  .btn-action {
+    padding: 8px 13px;
+    font-size: 0.78rem;
+  }
+  .theme-toggle-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.95rem;
+  }
+  .nav-search-bar {
+    grid-area: search;
+    max-width: 100%;
+    width: 100%;
+  }
+  .nav-search-bar input {
+    padding: 10px 16px 10px 40px;
+    font-size: 0.84rem;
+  }
+
+  /* Hero Section Proporsional */
+  .hero-creative {
+    margin: 24px auto 16px;
+    padding: 0 16px;
+  }
+  .hero-creative h2 {
+    font-size: 1.95rem;
+    letter-spacing: -0.6px;
+    line-height: 1.25;
+  }
+  .hero-creative p {
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  /* Filter Jurusan Tetap Bisa Digulir Menyamping */
+  .filter-sticky-wrap {
+    margin: 18px auto 12px;
+    padding: 0 14px;
+  }
+  .pills-container {
+    gap: 6px;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-btn-pill {
+    padding: 7px 15px;
+    font-size: 0.78rem;
+  }
+  .sub-filter-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .sub-filter-row > div:last-child {
+    display: flex;
+    gap: 8px;
+  }
+  .select-dropdown-interactive {
+    flex: 1;
+    font-size: 0.8rem;
+    padding: 8px 10px;
+  }
+
+  /* Grid Produk Otomatis 2 Kolom untuk Layar Mobile Standar */
+  .catalog-main {
+    padding: 0 12px;
+  }
+  .cards-3d-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .card-item-glass {
+    padding: 10px;
+    border-radius: 16px;
+  }
+  .card-media-box {
+    height: 140px;
+    border-radius: 10px;
+  }
+  .card-title-text {
+    font-size: 0.85rem;
+    min-height: 2.4em;
+    margin-bottom: 6px;
+  }
+  .card-price-text {
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+  }
+  .card-cod-row {
+    font-size: 0.68rem;
+  }
+
+  /* Tim & CTA Banner */
+  .team-section {
+    margin: 50px auto 25px;
+    padding: 0 16px;
+  }
+  .team-section-title {
+    font-size: 1.65rem;
+  }
+  .team-member-card {
+    width: 100%;
+    max-width: 320px;
+  }
+  .cta-banner-section {
+    margin: 40px auto 30px;
+    padding: 0 14px;
+  }
+  .cta-banner-card {
+    padding: 24px 18px;
+    border-radius: 20px;
+    text-align: center;
+    justify-content: center;
+  }
+  .cta-banner-card h3 {
+    font-size: 1.35rem;
+  }
+  .btn-cta-explore {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Modal Detail & Modal Form */
+  .modal-glass-box {
+    padding: 20px 16px;
+    border-radius: 22px;
+    width: 92%;
+    max-height: 85vh;
+  }
+
+  /* Floating Chat Drawer agar tidak mentok ke pinggir */
+  .chat-drawer-box {
+    width: calc(100vw - 32px);
+    right: 16px;
+    bottom: 84px;
+    height: 420px;
+  }
+  .floating-chat-trigger {
+    bottom: 20px;
+    right: 18px;
+    width: 50px;
+    height: 50px;
+    font-size: 1.3rem;
+  }
+}
+
+/* 4. Layar HP Ringkas (< 380px, misal iPhone SE atau Android layar kecil) */
+@media screen and (max-width: 380px) {
+  .cards-3d-grid {
+    grid-template-columns: 1fr; /* 1 kolom penuh agar isi kartu tidak gepeng */
+  }
+  .card-media-box {
+    height: 180px;
+  }
+}
