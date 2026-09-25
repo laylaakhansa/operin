@@ -1,12 +1,12 @@
-// URL Google Apps Script Web App Operin SMKN 8 Jakarta
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwrE3J4fxOT20pvzdWpMLwRCOBi79cS0-0S9xCXcR0zT631leDAduQFqSIvte7QfJ8Y/exec";
+// URL Google Apps Script API Operin SMKN 8 Jakarta
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqv7eJF4astEmoOpGVK1-io1eFHal5zFmLoRCwy9BczkGZ0PjAuykRi2y0OT6_Itd9/exec";
 
 let allItems = [];
 let selectedMajor = '';
 let activeDetailItem = null;
 let currentUser = JSON.parse(localStorage.getItem('operin_user')) || null;
 
-// --- 1. Custom Glowing Cursor ---
+// --- 1. Custom Glowing Cursor Follower ---
 const cursorDot = document.getElementById('cursorDot');
 const cursorOutline = document.getElementById('cursorOutline');
 
@@ -42,7 +42,7 @@ if (savedTheme) {
   if (btn) btn.innerText = savedTheme === 'dark' ? '☀️' : '🌓';
 }
 
-// --- 3. Manajemen Akun Siswa & Google Sheets ---
+// --- 3. Auth UI Management ---
 function updateAuthButtonUI() {
   const authBtn = document.getElementById('btnGoogleAuth');
   const authText = document.getElementById('authText');
@@ -71,30 +71,18 @@ function handleAuthClick() {
   }
 }
 
+// Simpan Akun Siswa ke Google Sheets
 async function handleRegisterUser(e) {
   e.preventDefault();
-
-  const nameInput = document.getElementById('regName').value.trim();
-  const gradeInput = document.getElementById('regGrade').value;
-  const majorInput = document.getElementById('regMajor').value;
-  const emailInput = document.getElementById('regEmail').value.trim();
-  const phoneInput = document.getElementById('regPhone').value.trim();
-
-  if (!nameInput || !phoneInput) {
-    alert('Harap lengkapi nama dan nomor WhatsApp aktif!');
-    return;
-  }
-
   const userData = {
     action: "register_user",
-    name: nameInput,
-    grade: gradeInput,
-    major: majorInput,
-    email: emailInput,
-    phone: phoneInput
+    name: document.getElementById('regName').value.trim(),
+    grade: document.getElementById('regGrade').value,
+    major: document.getElementById('regMajor').value,
+    email: document.getElementById('regEmail').value.trim(),
+    phone: document.getElementById('regPhone').value.trim()
   };
 
-  // Simpan login langsung di browser
   currentUser = {
     name: userData.name,
     grade: userData.grade,
@@ -105,9 +93,8 @@ async function handleRegisterUser(e) {
   localStorage.setItem('operin_user', JSON.stringify(currentUser));
   updateAuthButtonUI();
   closeModal('modalAuth');
-  alert(`Menyimpan profil ${currentUser.name} ke database...`);
+  alert(`Menyimpan profil ${currentUser.name}...`);
 
-  // Kirim data akun ke tab Users di Google Sheets
   try {
     await fetch(APPS_SCRIPT_URL, {
       method: "POST",
@@ -115,13 +102,13 @@ async function handleRegisterUser(e) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData)
     });
-    alert(`Profil berhasil tersimpan di Google Sheets Operin!`);
+    alert(`Profil berhasil tersimpan di database Operin!`);
   } catch (err) {
     console.error("Gagal sinkron akun:", err);
   }
 }
 
-// --- 4. Memuat & Merender Katalog dari Google Sheets ---
+// --- 4. Mengambil Katalog Barang dari Google Sheets ---
 async function loadItems() {
   const grid = document.getElementById('catalogGrid');
   grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px;">⏳ Memuat katalog perlengkapan dari database...</div>`;
@@ -212,7 +199,7 @@ function renderItems() {
   attachCursorHoverEffect();
 }
 
-// --- 5. 3D Tilt Card Interaction ---
+// --- 5. 3D Tilt Physics Engine ---
 function handleTilt(e, cardWrap) {
   const rect = cardWrap.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -230,7 +217,7 @@ function resetTilt(cardWrap) {
   cardWrap.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
 }
 
-// --- 6. Form & Modal Functions ---
+// --- 6. Modal & Detail Handlers ---
 function togglePriceFields() {
   const scheme = document.getElementById('itemScheme').value;
   document.getElementById('fieldPrice').style.display = scheme === 'Berbayar' ? 'block' : 'none';
@@ -280,7 +267,7 @@ function openDetail(id) {
   openModal('modalDetail');
 }
 
-// --- 7. Tombol Booking & Direct WhatsApp ke Penjual ---
+// --- 7. Booking & Direct WhatsApp Penjual ---
 function handleBooking() {
   if (!currentUser) {
     alert('Silakan masuk atau daftar akun siswa terlebih dahulu!');
@@ -324,7 +311,7 @@ function handleAmbilWA() {
   closeModal('modalDetail');
 }
 
-// --- 8. Simpan Titip Barang ke Google Sheets ---
+// --- 8. Simpan Titip Barang Baru ke Google Sheets ---
 async function submitNewItem(e) {
   e.preventDefault();
   if (!currentUser) {
@@ -371,7 +358,7 @@ async function submitNewItem(e) {
   }
 }
 
-// --- 9. Chat Drawer Assistant ---
+// --- 9. Chat Assistant Drawer ---
 function toggleChat() {
   const card = document.getElementById('chatCard');
   if (card) card.style.display = (card.style.display === 'flex') ? 'none' : 'flex';
@@ -397,7 +384,7 @@ function sendChat() {
   }, 500);
 }
 
-// Mulai aplikasi
+// Inisialisasi awal saat script dimuat
 updateAuthButtonUI();
 loadItems();
 attachCursorHoverEffect();
