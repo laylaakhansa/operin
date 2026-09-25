@@ -1,429 +1,419 @@
 <!DOCTYPE html>
-<html lang="id" data-theme="light">
+<html lang="id" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">  
-  <title>Operin — Interactive Marketplace SMKN 8 Jakarta</title>
-  
-  <!-- Satoshi Font (Fontshare CDN) -->
-  <link rel="preconnect" href="https://api.fontshare.com">
-  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,800,900&display=swap" rel="stylesheet">
-  
-  <!-- CSS Terpisah -->
-  <link rel="stylesheet" href="style.css?v=2.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">  
+  <title>Operin — Interactive Marketplace SMKN 8 Jakarta</title>
+  
+  <!-- Satoshi Font (Fontshare CDN) -->
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,800,900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Custom Glowing Cursor -->
-  <div class="custom-cursor-dot" id="cursorDot"></div>
-  <div class="custom-cursor-outline" id="cursorOutline"></div>
+  <!-- Custom Glowing Cursor -->
+  <div class="custom-cursor-dot" id="cursorDot"></div>
+  <div class="custom-cursor-outline" id="cursorOutline"></div>
 
-  <!-- Ambient Glowing Blobs -->
-  <div class="ambient-glow-wrap">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-  </div>
+  <!-- Ambient Glowing Blobs -->
+  <div class="ambient-glow-wrap">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
 
-  <div class="app-container">
-    <!-- Navbar Glassmorphism -->
-    <header class="nav-header">
-      <div class="nav-glass">
-        <!-- Logo Modern Estafet / Loop Transfer -->
-        <a href="#" class="brand-link">
-          <div class="brand-badge-logo" title="Operin Logo">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-              <path d="M3 3v5h5"/>
-              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
-              <path d="M16 16h5v5"/>
-            </svg>
-          </div>
-          <div class="brand-title">
-            <h1>oper<span>in</span><span class="brand-dot">•</span></h1>
-            <span>SMKN 8 Jakarta</span>
-          </div>
-        </a>
+  <div class="app-container">
+    <!-- Navbar Glassmorphism -->
+    <header class="nav-header">
+      <div class="nav-glass">
+        <a href="#" class="brand-link">
+          <div class="brand-badge-logo" title="Operin Logo">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+              <path d="M16 16h5v5"/>
+            </svg>
+          </div>
+          <div class="brand-title">
+            <h1>oper<span>in</span><span class="brand-dot">•</span></h1>
+            <span>SMKN 8 Jakarta</span>
+          </div>
+        </a>
 
-        <div class="nav-search-bar">
-          <span class="search-ico">🔍</span>
-          <input type="text" id="searchInput" placeholder="Cari perlengkapan magang, buku kejuruan, alat..." oninput="renderItems()">
-        </div>
+        <div class="nav-search-bar">
+          <span class="search-ico">🔍</span>
+          <input type="text" id="searchInput" placeholder="Cari perlengkapan magang, buku kejuruan, alat..." oninput="renderItems()">
+        </div>
 
-        <div class="nav-buttons">
-          <button class="theme-toggle-btn" id="btnThemeToggle" onclick="toggleTheme()" title="Ubah Tema Gelap/Terang">🌓</button>
-          <button class="btn-action btn-sell-primary" onclick="openModal('modalAdd')">
-            <span>+</span> Titip Barang
-          </button>
-          <button class="btn-action btn-auth-glass" id="btnGoogleAuth" onclick="handleAuthClick()">
-            <svg width="15" height="15" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-            </svg>
-            <span id="authText">Masuk / Daftar</span>
-          </button>
-        </div>
-      </div>
-    </header>
+        <div class="nav-buttons">
+          <button class="theme-toggle-btn" id="btnThemeToggle" onclick="toggleTheme()" title="Ubah Tema Gelap/Terang">☀️</button>
+          <button class="btn-action btn-sell-primary" onclick="handleOpenAddModal()">
+            <span>+</span> Titip Barang
+          </button>
+          <button class="btn-action btn-auth-glass" id="btnGoogleAuth" onclick="handleAuthClick()">
+            <span id="authText">Masuk / Daftar</span>
+          </button>
+        </div>
+      </div>
+    </header>
 
-    <!-- Hero Creative Section -->
-    <section class="hero-creative">
-      <div class="hero-pill-tag">✨ Platform Kolaborasi Kejuruan Siswa SMKN 8 Jakarta</div>
-      <h2>Estafet Alat Praktik <span class="hero-gradient-text">Tanpa Beban Biaya</span></h2>
-      <p>Saling hibahkan, tukar alat lewat barter, atau temukan perlengkapan preloved kejuruan terpercaya langsung di titik kumpul sekolah kita.</p>
-    </section>
+    <!-- Hero Creative Section -->
+    <section class="hero-creative">
+      <div class="hero-pill-tag">✨ Platform Kolaborasi Kejuruan Siswa SMKN 8 Jakarta</div>
+      <h2>Estafet Alat Praktik <span class="hero-gradient-text">Tanpa Beban Biaya</span></h2>
+      <p>Saling hibahkan, tukar alat lewat barter, atau temukan perlengkapan preloved kejuruan terpercaya langsung di titik kumpul sekolah kita.</p>
+    </section>
 
-    <!-- Filter Section with Pills & Sort -->
-    <section class="filter-sticky-wrap" id="katalog">
-      <div class="pills-container" id="majorPills">
-        <button class="filter-btn-pill active" onclick="setFilterMajor('')">Semua Jurusan</button>
-        <button class="filter-btn-pill" onclick="setFilterMajor('Akuntansi')">Akuntansi</button>
-        <button class="filter-btn-pill" onclick="setFilterMajor('Bisnis Digital')">Bisnis Digital</button>
-        <button class="filter-btn-pill" onclick="setFilterMajor('Bisnis Retail')">Bisnis Retail</button>
-        <button class="filter-btn-pill" onclick="setFilterMajor('Manajemen Perkantoran')">Manajemen Perkantoran</button>
-        <button class="filter-btn-pill" onclick="setFilterMajor('Manajemen Logistik')">Manajemen Logistik</button>
-        <button class="filter-btn-pill" onclick="setFilterMajor('Usaha Layanan Wisata')">Usaha Layanan Wisata</button>
-        <button class="filter-btn-pill" onclick="setFilterMajor('Rekayasa Perangkat Lunak')">Rekayasa Perangkat Lunak</button>
-      </div>
+    <!-- Filter Section with Pills & Sort -->
+    <section class="filter-sticky-wrap" id="katalog">
+      <div class="pills-container" id="majorPills">
+        <button class="filter-btn-pill active" onclick="setFilterMajor('')">Semua Jurusan</button>
+        <button class="filter-btn-pill" onclick="setFilterMajor('Akuntansi')">Akuntansi</button>
+        <button class="filter-btn-pill" onclick="setFilterMajor('Bisnis Digital')">Bisnis Digital</button>
+        <button class="filter-btn-pill" onclick="setFilterMajor('Bisnis Retail')">Bisnis Retail</button>
+        <button class="filter-btn-pill" onclick="setFilterMajor('Manajemen Perkantoran')">Manajemen Perkantoran</button>
+        <button class="filter-btn-pill" onclick="setFilterMajor('Manajemen Logistik')">Manajemen Logistik</button>
+        <button class="filter-btn-pill" onclick="setFilterMajor('Usaha Layanan Wisata')">Usaha Layanan Wisata</button>
+        <button class="filter-btn-pill" onclick="setFilterMajor('Rekayasa Perangkat Lunak')">Rekayasa Perangkat Lunak</button>
+      </div>
 
-      <div class="sub-filter-row">
-        <div class="counter-text">
-          Daftar Perlengkapan (<span id="itemCount">0</span> barang aktif)
-        </div>
-        <div style="display: flex; gap: 8px;">
-          <select id="filterScheme" class="select-dropdown-interactive" onchange="renderItems()">
-            <option value="">Semua Skema</option>
-            <option value="Gratis">Hibah (Rp0)</option>
-            <option value="Barter">Barter</option>
-            <option value="Berbayar">Berbayar</option>
-          </select>
-          <select id="sortPrice" class="select-dropdown-interactive" onchange="renderItems()">
-            <option value="newest">Terbaru Dititipkan</option>
-            <option value="lowest">Harga Terendah</option>
-            <option value="highest">Harga Tertinggi</option>
-          </select>
-        </div>
-      </div>
-    </section>
+      <div class="sub-filter-row">
+        <div class="counter-text">
+          Daftar Perlengkapan (<span id="itemCount">0</span> barang aktif)
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <select id="filterScheme" class="select-dropdown-interactive" onchange="renderItems()">
+            <option value="">Semua Skema</option>
+            <option value="Gratis">Hibah (Rp0)</option>
+            <option value="Barter">Barter</option>
+            <option value="Berbayar">Berbayar</option>
+          </select>
+          <select id="sortPrice" class="select-dropdown-interactive" onchange="renderItems()">
+            <option value="newest">Terbaru Dititipkan</option>
+            <option value="lowest">Harga Terendah</option>
+            <option value="highest">Harga Tertinggi</option>
+          </select>
+        </div>
+      </div>
+    </section>
 
-    <!-- Main 3D Grid Catalog -->
-    <main class="catalog-main">
-      <div id="catalogGrid" class="cards-3d-grid"></div>
-      <div id="emptyMsg" style="display: none; text-align: center; padding: 60px 20px; color: var(--text-muted);">
-        <div style="font-size: 3rem; margin-bottom: 12px;">🔍</div>
-        <p style="font-weight: 700; font-size: 1.1rem;">Tidak ada barang yang cocok dengan pencarianmu.</p>
-      </div>
-    </main>
+    <!-- Main 3D Grid Catalog -->
+    <main class="catalog-main">
+      <div id="catalogGrid" class="cards-3d-grid"></div>
+      <div id="emptyMsg" style="display: none; text-align: center; padding: 60px 20px; color: var(--text-muted);">
+        <div style="font-size: 3rem; margin-bottom: 12px;">🔍</div>
+        <p style="font-weight: 700; font-size: 1.1rem;">Tidak ada barang yang cocok dengan pencarianmu.</p>
+      </div>
+    </main>
 
-    <!-- Team Developer Section ala TDKop -->
-    <section class="team-section">
-      <h2 class="team-section-title">Tim Developer <span>Operin</span></h2>
-      <p class="team-section-subtitle">
-        Siswa SMKN 8 Jakarta yang mengembangkan platform estafet perlengkapan praktik kejuruan sekolah.
-      </p>
+    <!-- Team Developer Section -->
+    <section class="team-section">
+      <h2 class="team-section-title">Tim Developer <span>Operin</span></h2>
+      <p class="team-section-subtitle">
+        Siswa SMKN 8 Jakarta yang mengembangkan platform estafet perlengkapan praktik kejuruan sekolah.
+      </p>
 
-      <div class="team-grid-container">
-        <!-- 1. Layla -->
-        <div class="team-member-card">
-          <span class="team-badge-role">FULLSTACK</span>
-          <div class="team-avatar-frame">
-            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Layla" alt="Layla" class="team-avatar-img">
-          </div>
-          <div class="team-name">Layla</div>
-          <div class="team-school">SMKN 8 Jakarta</div>
-          <div class="team-status-pill">
-            <span class="team-status-dot"></span>
-            Fullstack Dev
-          </div>
-        </div>
+      <div class="team-grid-container">
+        <div class="team-member-card">
+          <span class="team-badge-role">FULLSTACK</span>
+          <div class="team-avatar-frame">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Layla" alt="Layla" class="team-avatar-img">
+          </div>
+          <div class="team-name">Layla</div>
+          <div class="team-school">SMKN 8 Jakarta</div>
+          <div class="team-status-pill">
+            <span class="team-status-dot"></span>
+            Fullstack Dev
+          </div>
+        </div>
 
-        <!-- 2. Callysta -->
-        <div class="team-member-card">
-          <span class="team-badge-role">UI / UX</span>
-          <div class="team-avatar-frame">
-            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Callysta" alt="Callysta" class="team-avatar-img">
-          </div>
-          <div class="team-name">Callysta</div>
-          <div class="team-school">SMKN 8 Jakarta</div>
-          <div class="team-status-pill">
-            <span class="team-status-dot"></span>
-            UI/UX & Data Analyst
-          </div>
-        </div>
-      </div>
-    </section>
+        <div class="team-member-card">
+          <span class="team-badge-role">UI / UX</span>
+          <div class="team-avatar-frame">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Callysta" alt="Callysta" class="team-avatar-img">
+          </div>
+          <div class="team-name">Callysta</div>
+          <div class="team-school">SMKN 8 Jakarta</div>
+          <div class="team-status-pill">
+            <span class="team-status-dot"></span>
+            UI/UX & Data Analyst
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <!-- CALL TO ACTION (CTA) BANNER MELAYANG -->
-    <section class="cta-banner-section">
-      <div class="cta-banner-card">
-        <div class="cta-left-content">
-          <div class="cta-pill-mini">Operin : Estafet Praktis SMKN 8 Jakarta</div>
-          <h3>Praktik Kejuruan Lebih Hemat & Ramah Kantong</h3>
-          <p>Gunakan website Operin untuk saling oper alat praktik, baju kejuruan, dan modul belajar tanpa harus beli baru.</p>
-        </div>
-        <div>
-          <a href="#katalog" class="btn-cta-explore">
-            Jelajahi Katalog ➔
-          </a>
-        </div>
-      </div>
-    </section>
+    <!-- CTA Banner Melayang -->
+    <section class="cta-banner-section">
+      <div class="cta-banner-card">
+        <div class="cta-left-content">
+          <div class="cta-pill-mini">Operin : Estafet Praktis SMKN 8 Jakarta</div>
+          <h3>Praktik Kejuruan Lebih Hemat & Ramah Kantong</h3>
+          <p>Gunakan website Operin untuk saling oper alat praktik, baju kejuruan, dan modul belajar tanpa harus beli baru.</p>
+        </div>
+        <div>
+          <a href="#katalog" class="btn-cta-explore">
+            Jelajahi Katalog ➔
+          </a>
+        </div>
+      </div>
+    </section>
 
-    <!-- DARK FOOTER RESMI -->
-    <footer class="site-footer-dark">
-      <div class="footer-inner-grid">
-        <!-- Kolom 1: Brand & Status -->
-        <div class="footer-col-brand">
-          <div class="footer-brand-badge">
-            <div class="footer-brand-logo-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                <path d="M3 3v5h5"/>
-                <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
-                <path d="M16 16h5v5"/>
-              </svg>
-            </div>
-            <span class="footer-brand-name">oper<span>in</span>•</span>
-          </div>
-          <p class="footer-desc">
-            Sistem estafet perlengkapan praktik resmi siswa SMKN 8 Jakarta. Berbagi, barter, dan temukan alat kejuruan hemat tanpa repot.
-          </p>
-          <div class="footer-pill-status">
-            <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
-            Sistem Estafet Sekolah Aktif
-          </div>
-        </div>
+    <!-- Footer Resmi -->
+    <footer class="site-footer-dark">
+      <div class="footer-inner-grid">
+        <div class="footer-col-brand">
+          <div class="footer-brand-badge">
+            <span>oper<span>in</span>•</span>
+          </div>
+          <p class="footer-desc">
+            Sistem estafet perlengkapan praktik resmi siswa SMKN 8 Jakarta. Berbagi, barter, dan temukan alat kejuruan hemat tanpa repot.
+          </p>
+          <div class="footer-pill-status">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
+            Sistem Estafet Sekolah Aktif
+          </div>
+        </div>
 
-        <!-- Kolom 2: Navigasi -->
-        <div>
-          <div class="footer-col-title">Navigasi</div>
-          <ul class="footer-links-list">
-            <li><a href="#">Beranda</a></li>
-            <li><a href="#katalog">Katalog Produk</a></li>
-            <li><a href="javascript:void(0)" onclick="handleAuthClick()">Masuk Akun</a></li>
-            <li><a href="javascript:void(0)" onclick="openModal('modalAuth')">Daftar Akun</a></li>
-          </ul>
-        </div>
+        <div>
+          <div class="footer-col-title">Navigasi</div>
+          <ul class="footer-links-list">
+            <li><a href="#">Beranda</a></li>
+            <li><a href="#katalog">Katalog Produk</a></li>
+            <li><a href="javascript:void(0)" onclick="handleAuthClick()">Masuk / Profil</a></li>
+          </ul>
+        </div>
 
-        <!-- Kolom 3: Kategori Jurusan -->
-        <div>
-          <div class="footer-col-title">Kategori Jurusan</div>
-          <ul class="footer-links-list">
-            <li><a href="javascript:void(0)" onclick="setFilterMajor('Bisnis Digital')">Pemasaran (BD & BR)</a></li>
-            <li><a href="javascript:void(0)" onclick="setFilterMajor('Manajemen Perkantoran')">Manajemen (MP & ManLog)</a></li>
-            <li><a href="javascript:void(0)" onclick="setFilterMajor('Usaha Layanan Wisata')">Usaha Layanan Wisata</a></li>
-            <li><a href="javascript:void(0)" onclick="setFilterMajor('Rekayasa Perangkat Lunak')">Rekayasa Perangkat Lunak</a></li>
-          </ul>
-        </div>
+        <div>
+          <div class="footer-col-title">Kategori Jurusan</div>
+          <ul class="footer-links-list">
+            <li><a href="javascript:void(0)" onclick="setFilterMajor('Bisnis Digital')">Bisnis Digital</a></li>
+            <li><a href="javascript:void(0)" onclick="setFilterMajor('Akuntansi')">Akuntansi</a></li>
+            <li><a href="javascript:void(0)" onclick="setFilterMajor('Rekayasa Perangkat Lunak')">RPL</a></li>
+          </ul>
+        </div>
 
-        <!-- Kolom 4: Hubungi Kami -->
-        <div>
-          <div class="footer-col-title">Hubungi Kami</div>
-          <ul class="footer-contact-list">
-            <li class="contact-item-row">
-              <div class="contact-icon-circle">📍</div>
-              <div>Jl. Pejaten Raya, RT.6/RW.6, Pejaten Bar., Ps. Minggu, Jakarta Selatan 12510</div>
-            </li>
-            <li class="contact-item-row">
-              <div class="contact-icon-circle">📞</div>
-              <div>083171164721 (WA Only)</div>
-            </li>
-            <li class="contact-item-row">
-              <div class="contact-icon-circle">✉️</div>
-              <div>operin.smkn8jkt@gmail.com</div>
-            </li>
-          </ul>
-        </div>
-      </div>
+        <div>
+          <div class="footer-col-title">Hubungi Kami</div>
+          <ul class="footer-contact-list">
+            <li class="contact-item-row">📍 SMKN 8 Jakarta Selatan</li>
+            <li class="contact-item-row">📞 083171164721 (WA)</li>
+            <li class="contact-item-row">✉️ operin.smkn8jkt@gmail.com</li>
+          </ul>
+        </div>
+      </div>
 
-      <!-- Bottom Copyright Bar -->
-      <div class="footer-bottom-bar">
-        <div>
-          © 2026 <strong>Operin</strong> — Platform Estafet Alat Praktik Siswa SMKN 8 Jakarta. Seluruh hak cipta dilindungi.
-        </div>
-        <div>
-          🔵 Copyright 2026 - TechSync
-        </div>
-      </div>
-    </footer>
-  </div>
+      <div class="footer-bottom-bar">
+        <div>© 2026 <strong>Operin</strong> — SMKN 8 Jakarta.</div>
+        <div>TechSync Team</div>
+      </div>
+    </footer>
+  </div>
 
-  <!-- Modal Auth Siswa Wajib Lengkap -->
-  <div id="modalAuth" class="interactive-modal-overlay">
-    <div class="modal-glass-box">
-      <div class="modal-top-bar">
-        <div>
-          <h3>Daftar Akun Siswa</h3>
-          <p style="font-size: 0.78rem; color: #ef4444; font-weight: 600; margin-top: 2px;">* Semua kolom wajib diisi lengkap</p>
-        </div>
-        <button class="close-circle-btn" onclick="closeModal('modalAuth')">&times;</button>
-      </div>
-      <form onsubmit="handleRegisterUser(event)">
-        <div class="form-group-field">
-          <label>Nama Lengkap Siswa *</label>
-          <input type="text" id="regName" class="form-control-glass" placeholder="Contoh: Siswa SMKN 8" required minlength="3">
-        </div>
-        <div class="form-group-field">
-          <label>Tingkat / Kelas *</label>
-          <select id="regGrade" class="form-control-glass" required>
-            <option value="" disabled selected>-- Pilih Tingkat Kelas --</option>
-            <option value="Kelas 10">Kelas 10</option>
-            <option value="Kelas 11">Kelas 11</option>
-            <option value="Kelas 12">Kelas 12</option>
-            <option value="Alumni">Alumni</option>
-          </select>
-        </div>
-        <div class="form-group-field">
-          <label>Jurusan *</label>
-          <select id="regMajor" class="form-control-glass" required>
-            <option value="" disabled selected>-- Pilih Jurusan Kamu --</option>
-            <option value="Akuntansi">Akuntansi</option>
-            <option value="Bisnis Digital">Bisnis Digital</option>
-            <option value="Bisnis Retail">Bisnis Retail</option>
-            <option value="Manajemen Perkantoran">Manajemen Perkantoran</option>
-            <option value="Manajemen Logistik">Manajemen Logistik</option>
-            <option value="Usaha Layanan Wisata">Usaha Layanan Wisata</option>
-            <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
-          </select>
-        </div>
-        <div class="form-group-field">
-          <label>Email Siswa / Akun Google *</label>
-          <input type="email" id="regEmail" class="form-control-glass" placeholder="siswa@smkn8jakarta.sch.id" required>
-        </div>
-        <div class="form-group-field">
-          <label>Nomor WhatsApp Aktif *</label>
-          <input type="tel" id="regPhone" class="form-control-glass" placeholder="081234567890" pattern="^(\+62|62|0)8[1-9][0-9]{6,10}$" required>
-        </div>
-        <button type="submit" class="btn-action btn-sell-primary" style="width: 100%; justify-content: center; padding: 13px; margin-top: 10px;">
-          Simpan Profil & Masuk
-        </button>
-      </form>
-    </div>
-  </div>
+  <!-- MODAL PROFIL AKUN SISWA -->
+  <div id="modalProfile" class="interactive-modal-overlay">
+    <div class="modal-glass-box">
+      <div class="modal-top-bar">
+        <h3>Profil Siswa</h3>
+        <button class="close-circle-btn" onclick="closeModal('modalProfile')">&times;</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 16px;">
+        <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #7c3aed); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 8px;">
+          👤
+        </div>
+        <h4 id="profName" style="font-size: 1.15rem; font-weight: 800;">-</h4>
+        <p id="profMeta" style="font-size: 0.82rem; color: var(--text-muted);">-</p>
+      </div>
 
-  <!-- Modal Tambah Titip Barang -->
-  <div id="modalAdd" class="interactive-modal-overlay">
-    <div class="modal-glass-box">
-      <div class="modal-top-bar">
-        <h3>Titip Alat Praktik Baru</h3>
-        <button class="close-circle-btn" onclick="closeModal('modalAdd')">&times;</button>
-      </div>
-      <form onsubmit="submitNewItem(event)">
-        <div class="form-group-field">
-          <label>Nama Alat / Perlengkapan *</label>
-          <input type="text" id="itemTitle" class="form-control-glass" placeholder="Contoh: Kemeja Magang Putih Formal" required>
-        </div>
-        <div class="form-group-field">
-          <label>Jurusan *</label>
-          <select id="itemMajor" class="form-control-glass" required>
-            <option value="" disabled selected>-- Pilih Jurusan --</option>
-            <option value="Akuntansi">Akuntansi</option>
-            <option value="Bisnis Digital">Bisnis Digital</option>
-            <option value="Bisnis Retail">Bisnis Retail</option>
-            <option value="Manajemen Perkantoran">Manajemen Perkantoran</option>
-            <option value="Manajemen Logistik">Manajemen Logistik</option>
-            <option value="Usaha Layanan Wisata">Usaha Layanan Wisata</option>
-            <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
-          </select>
-        </div>
-        <div class="form-group-field">
-          <label>Skema Estafet *</label>
-          <select id="itemScheme" class="form-control-glass" onchange="togglePriceFields()" required>
-            <option value="Gratis">Hibah / Gratis (Rp0)</option>
-            <option value="Barter">Barter (Tukar Alat)</option>
-            <option value="Berbayar">Jual Preloved Murah</option>
-          </select>
-        </div>
-        <div class="form-group-field" id="fieldPrice" style="display:none;">
-          <label>Harga Jual (Rp) *</label>
-          <input type="number" id="itemPrice" class="form-control-glass" value="0" placeholder="Contoh: 35000">
-        </div>
-        <div class="form-group-field" id="fieldBarter" style="display:none;">
-          <label>Target Barter (Mau Ditukar Dengan Apa?) *</label>
-          <input type="text" id="itemBarter" class="form-control-glass" placeholder="Contoh: Mau barter dengan rompi safety size L">
-        </div>
-        <div class="form-group-field">
-          <label>Ukuran / Seri *</label>
-          <input type="text" id="itemSize" class="form-control-glass" placeholder="Contoh: Size L / Casio fx-991" required>
-        </div>
-        <div class="form-group-field">
-          <label>Kondisi Barang *</label>
-          <input type="text" id="itemCondition" class="form-control-glass" placeholder="Contoh: Sangat Baik (90%), bersih" required>
-        </div>
-        <div class="form-group-field">
-          <label>Catatan Minus *</label>
-          <input type="text" id="itemMinus" class="form-control-glass" placeholder="Contoh: Ada bekas nama di bagian kerah" required>
-        </div>
-        <div class="form-group-field">
-          <label>Titik COD SMKN 8 Jakarta *</label>
-          <select id="itemCod" class="form-control-glass" required>
-            <option value="" disabled selected>-- Pilih Lokasi COD Sekolah --</option>
-            <option value="lab bdp lt 1 depan gazebo">Lab BDP Lt 1 Depan Gazebo</option>
-            <option value="lab pai lt 1 samping musholla">Lab PAI Lt 1 Samping Musholla</option>
-            <option value="lab rpl lt 1 samping ruang guru rpl">Lab RPL Lt 1 Samping Ruang Guru RPL</option>
-            <option value="lab ulw depan lapangan">Lab ULW Depan Lapangan</option>
-            <option value="lab akl lt 2 arah aula">Lab AKL Lt 2 Arah Aula</option>
-            <option value="ki hajar dewantara deket business center">Ki Hajar Dewantara Deket Business Center</option>
-            <option value="resepsionis">Resepsionis</option>
-          </select>
-        </div>
-        <button type="submit" class="btn-action btn-sell-primary" style="width: 100%; justify-content: center; padding: 13px; margin-top: 10px;">
-          Tayangkan di Katalog Operin
-        </button>
-      </form>
-    </div>
-  </div>
+      <table class="spec-table-detail" style="margin-bottom: 16px;">
+        <tr><td>Email</td><td id="profEmail">-</td></tr>
+        <tr><td>WhatsApp</td><td id="profPhone">-</td></tr>
+        <tr><td>Peran Akun</td><td id="profRoleBadge">-</td></tr>
+      </table>
 
-  <!-- Modal Detail Produk (Dengan Tombol Booking & Ambil via WA) -->
-  <div id="modalDetail" class="interactive-modal-overlay">
-    <div class="modal-glass-box">
-      <div class="modal-top-bar">
-        <h3 id="detTitle">Detail Perlengkapan</h3>
-        <button class="close-circle-btn" onclick="closeModal('modalDetail')">&times;</button>
-      </div>
-      <div id="detMediaBox"></div>
-      <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-top: 12px;" id="detPrice"></div>
+      <div id="sellerUpgradeArea" style="margin-bottom: 14px;"></div>
 
-      <table class="spec-table-detail">
-        <tr><td>Jurusan</td><td id="detMajor"></td></tr>
-        <tr><td>Skema</td><td id="detScheme"></td></tr>
-        <tr id="detBarterRow"><td>Target Barter</td><td id="detBarter"></td></tr>
-        <tr><td>Ukuran/Seri</td><td id="detSize"></td></tr>
-        <tr><td>Kondisi</td><td id="detCondition"></td></tr>
-        <tr><td>Minus</td><td id="detMinus"></td></tr>
-        <tr><td>Titik Janjian</td><td id="detCod"></td></tr>
-      </table>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn-action btn-auth-glass" style="flex: 1; justify-content: center;" onclick="closeModal('modalProfile')">Tutup</button>
+        <button type="button" class="btn-action" style="flex: 1; justify-content: center; background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);" onclick="handleLogoutUser()">Keluar</button>
+      </div>
+    </div>
+  </div>
 
-      <!-- 2 Tombol Berdampingan: Booking & Ambil -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px;">
-        <button type="button" class="btn-action btn-auth-glass" style="justify-content: center; padding: 12px;" onclick="handleBooking()">
-          📌 Booking
-        </button>
-        <button type="button" class="btn-action btn-sell-primary" style="justify-content: center; padding: 12px; background: linear-gradient(135deg, #10b981, #059669);" onclick="handleAmbilWA()">
-          ⚡ Ambil (via WA)
-        </button>
-      </div>
-    </div>
-  </div>
+  <!-- MODAL DAFTAR AKUN -->
+  <div id="modalAuth" class="interactive-modal-overlay">
+    <div class="modal-glass-box">
+      <div class="modal-top-bar">
+        <h3>Daftar Akun Operin</h3>
+        <button class="close-circle-btn" onclick="closeModal('modalAuth')">&times;</button>
+      </div>
+      <form onsubmit="handleRegisterUser(event)">
+        <div class="form-group-field">
+          <label>Nama Lengkap Siswa *</label>
+          <input type="text" id="regName" class="form-control-glass" placeholder="Contoh: Siswa SMKN 8" required minlength="3">
+        </div>
+        <div class="form-group-field">
+          <label>Tingkat / Kelas *</label>
+          <select id="regGrade" class="form-control-glass" required>
+            <option value="Kelas 10">Kelas 10</option>
+            <option value="Kelas 11" selected>Kelas 11</option>
+            <option value="Kelas 12">Kelas 12</option>
+            <option value="Alumni">Alumni</option>
+          </select>
+        </div>
+        <div class="form-group-field">
+          <label>Jurusan *</label>
+          <select id="regMajor" class="form-control-glass" required>
+            <option value="Bisnis Digital" selected>Bisnis Digital</option>
+            <option value="Akuntansi">Akuntansi</option>
+            <option value="Bisnis Retail">Bisnis Retail</option>
+            <option value="Manajemen Perkantoran">Manajemen Perkantoran</option>
+            <option value="Manajemen Logistik">Manajemen Logistik</option>
+            <option value="Usaha Layanan Wisata">Usaha Layanan Wisata</option>
+            <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
+          </select>
+        </div>
+        <div class="form-group-field">
+          <label>Email Siswa *</label>
+          <input type="email" id="regEmail" class="form-control-glass" placeholder="nama@gmail.com" required>
+        </div>
+        <div class="form-group-field">
+          <label>Nomor WhatsApp Aktif *</label>
+          <input type="tel" id="regPhone" class="form-control-glass" placeholder="08xxxxxxxxxx" required>
+        </div>
+        <div class="form-group-field">
+          <label>Kategori Akun *</label>
+          <select id="regRole" class="form-control-glass" required>
+            <option value="Penjual" selected>Penjual / Penitip Alat (Bisa titip barang & booking)</option>
+            <option value="Pembeli">Pembeli Saja (Hanya booking/ambil)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-action btn-sell-primary" style="width: 100%; justify-content: center; padding: 11px; margin-top: 8px;">
+          Simpan Profil & Masuk
+        </button>
+      </form>
+    </div>
+  </div>
 
-  <!-- Floating Chat Assistant -->
-  <div class="floating-chat-trigger" onclick="toggleChat()">💬</div>
-  <div id="chatCard" class="chat-drawer-box">
-    <div class="chat-drawer-header">
-      <span>Operin AI Assistant</span>
-      <button onclick="toggleChat()" style="background:transparent; border:none; color:white; font-size:1.3rem; cursor:pointer;">&times;</button>
-    </div>
-    <div class="chat-conversation-body" id="chatLogs">
-      <div class="bubble-item bot">Halo! Butuh rekomendasi alat praktik atau informasi 7 titik temu COD di SMKN 8 Jakarta?</div>
-    </div>
-    <div class="chat-input-bar">
-      <input type="text" id="chatInput" class="form-control-glass" placeholder="Ketik pertanyaan..." onkeypress="if(event.key==='Enter') sendChat()">
-      <button class="btn-action btn-sell-primary" style="padding: 8px 16px;" onclick="sendChat()">Kirim</button>
-    </div>
-  </div>
+  <!-- Modal Tambah Titip Barang -->
+  <div id="modalAdd" class="interactive-modal-overlay">
+    <div class="modal-glass-box">
+      <div class="modal-top-bar">
+        <h3>Titip Alat Praktik</h3>
+        <button class="close-circle-btn" onclick="closeModal('modalAdd')">&times;</button>
+      </div>
+      <form onsubmit="submitNewItem(event)">
+        <div class="form-group-field">
+          <label>Nama Perlengkapan *</label>
+          <input type="text" id="itemTitle" class="form-control-glass" placeholder="Contoh: Kemeja Magang Putih Formal" required>
+        </div>
+        <div class="form-group-field">
+          <label>Jurusan *</label>
+          <select id="itemMajor" class="form-control-glass" required>
+            <option value="Bisnis Digital">Bisnis Digital</option>
+            <option value="Akuntansi">Akuntansi</option>
+            <option value="Bisnis Retail">Bisnis Retail</option>
+            <option value="Manajemen Perkantoran">Manajemen Perkantoran</option>
+            <option value="Manajemen Logistik">Manajemen Logistik</option>
+            <option value="Usaha Layanan Wisata">Usaha Layanan Wisata</option>
+            <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
+          </select>
+        </div>
+        <div class="form-group-field">
+          <label>Skema Estafet *</label>
+          <select id="itemScheme" class="form-control-glass" onchange="togglePriceFields()" required>
+            <option value="Gratis">Hibah / Gratis (Rp0)</option>
+            <option value="Barter">Barter (Tukar Alat)</option>
+            <option value="Berbayar">Jual Preloved Murah</option>
+          </select>
+        </div>
+        <div class="form-group-field" id="fieldPrice" style="display:none;">
+          <label>Harga Jual (Rp)</label>
+          <input type="number" id="itemPrice" class="form-control-glass" value="0">
+        </div>
+        <div class="form-group-field" id="fieldBarter" style="display:none;">
+          <label>Target Barter</label>
+          <input type="text" id="itemBarter" class="form-control-glass" placeholder="Contoh: Barter rompi safety size L">
+        </div>
+        <div class="form-group-field">
+          <label>Ukuran / Seri *</label>
+          <input type="text" id="itemSize" class="form-control-glass" placeholder="Contoh: Size L / Casio fx-991" required>
+        </div>
+        <div class="form-group-field">
+          <label>Kondisi Barang *</label>
+          <input type="text" id="itemCondition" class="form-control-glass" placeholder="Contoh: Sangat Baik (90%)" required>
+        </div>
+        <div class="form-group-field">
+          <label>Catatan Minus *</label>
+          <input type="text" id="itemMinus" class="form-control-glass" placeholder="Contoh: Tidak ada minus" required>
+        </div>
+        <div class="form-group-field">
+          <label>Titik COD SMKN 8 Jakarta *</label>
+          <select id="itemCod" class="form-control-glass" required>
+            <option value="lab bdp lt 1 depan gazebo">Lab BDP Lt 1 Depan Gazebo</option>
+            <option value="lab pai lt 1 samping musholla">Lab PAI Lt 1 Samping Musholla</option>
+            <option value="lab rpl lt 1 samping ruang guru rpl">Lab RPL Lt 1 Samping Ruang Guru RPL</option>
+            <option value="lab ulw depan lapangan">Lab ULW Depan Lapangan</option>
+            <option value="lab akl lt 2 arah aula">Lab AKL Lt 2 Arah Aula</option>
+            <option value="ki hajar dewantara deket business center">Ki Hajar Dewantara Deket BC</option>
+            <option value="resepsionis">Resepsionis</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-action btn-sell-primary" style="width: 100%; justify-content: center; padding: 11px; margin-top: 8px;">
+          Tayangkan di Katalog Operin
+        </button>
+      </form>
+    </div>
+  </div>
 
-  <!-- JavaScript Terpisah -->
-  <script src="script.js"></script>
+  <!-- Modal Detail Produk -->
+  <div id="modalDetail" class="interactive-modal-overlay">
+    <div class="modal-glass-box">
+      <div class="modal-top-bar">
+        <h3 id="detTitle">Detail Perlengkapan</h3>
+        <button class="close-circle-btn" onclick="closeModal('modalDetail')">&times;</button>
+      </div>
+      <div id="detMediaBox"></div>
+      <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary); margin-top: 10px;" id="detPrice"></div>
+
+      <table class="spec-table-detail">
+        <tr><td>Jurusan</td><td id="detMajor"></td></tr>
+        <tr><td>Skema</td><td id="detScheme"></td></tr>
+        <tr id="detBarterRow"><td>Target Barter</td><td id="detBarter"></td></tr>
+        <tr><td>Ukuran/Seri</td><td id="detSize"></td></tr>
+        <tr><td>Kondisi</td><td id="detCondition"></td></tr>
+        <tr><td>Minus</td><td id="detMinus"></td></tr>
+        <tr><td>Titik COD</td><td id="detCod"></td></tr>
+      </table>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px;">
+        <button type="button" class="btn-action btn-auth-glass" style="justify-content: center; padding: 10px;" onclick="handleBooking()">
+          📌 Booking
+        </button>
+        <button type="button" class="btn-action btn-sell-primary" style="justify-content: center; padding: 10px; background: #10b981;" onclick="handleAmbilWA()">
+          ⚡ Ambil via WA
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Chat -->
+  <div class="floating-chat-trigger" onclick="toggleChat()">💬</div>
+  <div id="chatCard" class="chat-drawer-box">
+    <div class="chat-drawer-header">
+      <span>Operin AI Assistant</span>
+      <button onclick="toggleChat()" style="background:transparent; border:none; color:white; font-size:1.2rem; cursor:pointer;">&times;</button>
+    </div>
+    <div class="chat-conversation-body" id="chatLogs">
+      <div class="bubble-item bot">Halo! Butuh info alat atau 7 titik COD di SMKN 8 Jakarta?</div>
+    </div>
+    <div class="chat-input-bar">
+      <input type="text" id="chatInput" class="form-control-glass" placeholder="Ketik pertanyaan..." onkeypress="if(event.key==='Enter') sendChat()">
+      <button class="btn-action btn-sell-primary" style="padding: 7px 14px;" onclick="sendChat()">Kirim</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
