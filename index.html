@@ -51,7 +51,8 @@
 
         <div class="nav-buttons">
           <button class="theme-toggle-btn" id="btnThemeToggle" onclick="toggleTheme()" title="Ubah Tema Gelap/Terang">🌓</button>
-          <button class="btn-action btn-sell-primary" onclick="openModal('modalAdd')">
+          <!-- Tombol Titip Barang dengan Proteksi Role Penjual -->
+          <button class="btn-action btn-sell-primary" onclick="handleOpenAddModal()">
             <span>+</span> Titip Barang
           </button>
           <button class="btn-action btn-auth-glass" id="btnGoogleAuth" onclick="handleAuthClick()">
@@ -116,7 +117,7 @@
       </div>
     </main>
 
-    <!-- Team Developer Section ala TDKop -->
+    <!-- Team Developer Section -->
     <section class="team-section">
       <h2 class="team-section-title">Tim Developer <span>Operin</span></h2>
       <p class="team-section-subtitle">
@@ -201,7 +202,7 @@
           <ul class="footer-links-list">
             <li><a href="#">Beranda</a></li>
             <li><a href="#katalog">Katalog Produk</a></li>
-            <li><a href="javascript:void(0)" onclick="handleAuthClick()">Masuk Akun</a></li>
+            <li><a href="javascript:void(0)" onclick="handleAuthClick()">Masuk / Profil</a></li>
             <li><a href="javascript:void(0)" onclick="openModal('modalAuth')">Daftar Akun</a></li>
           </ul>
         </div>
@@ -249,7 +250,51 @@
     </footer>
   </div>
 
-  <!-- Modal Auth Siswa Wajib Lengkap -->
+  <!-- MODAL PROFIL AKUN SISWA -->
+  <div id="modalProfile" class="interactive-modal-overlay">
+    <div class="modal-glass-box">
+      <div class="modal-top-bar">
+        <h3>Profil Akun Siswa</h3>
+        <button class="close-circle-btn" onclick="closeModal('modalProfile')">&times;</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #7c3aed); color: white; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 10px; box-shadow: 0 6px 16px var(--primary-glow);">
+          👤
+        </div>
+        <h4 id="profName" style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">-</h4>
+        <p id="profMeta" style="font-size: 0.85rem; color: var(--text-muted);">-</p>
+      </div>
+
+      <table class="spec-table-detail" style="margin-bottom: 16px;">
+        <tr>
+          <td>Email Siswa</td>
+          <td id="profEmail">-</td>
+        </tr>
+        <tr>
+          <td>No. WhatsApp</td>
+          <td id="profPhone">-</td>
+        </tr>
+        <tr>
+          <td>Kategori Peran</td>
+          <td id="profRoleBadge">-</td>
+        </tr>
+      </table>
+
+      <!-- Area Upgrade jika user terdaftar sebagai Pembeli -->
+      <div id="sellerUpgradeArea" style="margin-bottom: 16px;"></div>
+
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="btn-action btn-auth-glass" style="flex: 1; justify-content: center;" onclick="closeModal('modalProfile')">
+          Tutup
+        </button>
+        <button type="button" class="btn-action" style="flex: 1; justify-content: center; background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25);" onclick="handleLogoutUser()">
+          Keluar Akun
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL MASUK / DAFTAR AKUN SISWA -->
   <div id="modalAuth" class="interactive-modal-overlay">
     <div class="modal-glass-box">
       <div class="modal-top-bar">
@@ -294,6 +339,13 @@
         <div class="form-group-field">
           <label>Nomor WhatsApp Aktif *</label>
           <input type="tel" id="regPhone" class="form-control-glass" placeholder="081234567890" pattern="^(\+62|62|0)8[1-9][0-9]{6,10}$" required>
+        </div>
+        <div class="form-group-field">
+          <label>Kategori Peran Akun *</label>
+          <select id="regRole" class="form-control-glass" required>
+            <option value="Penjual" selected>Penjual / Penitip Alat Praktik (Bisa upload & booking)</option>
+            <option value="Pembeli">Pembeli / Peminat Saja (Hanya booking/ambil via WA)</option>
+          </select>
         </div>
         <button type="submit" class="btn-action btn-sell-primary" style="width: 100%; justify-content: center; padding: 13px; margin-top: 10px;">
           Simpan Profil & Masuk
