@@ -1,5 +1,5 @@
 // URL Google Apps Script Web App Operin SMKN 8 Jakarta
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzmmVSmbRQ0xAzdF4s_rhaZCRR4aRk4eq3GpkJflE9YxnqgGk3tGaQBt4PfPy1r3VbT/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNtHd3WoZNpNk2WKxcA76-tbXc1EOs3CWyjwecRpNCT-oVbGjFXiOUr8PPajgKuqse/exec";
 
 let allItems = [];
 let selectedMajor = '';
