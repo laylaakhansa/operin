@@ -396,7 +396,35 @@ function sendChat() {
     logs.scrollTop = logs.scrollHeight;
   }, 500);
 }
+// Fungsi pembuka modal Titip Barang dengan proteksi akun
+function handleOpenAddModal() {
+  // 1. Cek apakah pengguna sudah login
+  if (!currentUser) {
+    alert('Silakan daftar atau masuk akun terlebih dahulu sebelum menitipkan barang!');
+    openModal('modalAuth');
+    return;
+  }
 
+  // 2. Cek apakah role akun adalah Penjual
+  if (currentUser.role !== 'Penjual') {
+    const konfirmasi = confirm(
+      `Halo ${currentUser.name}!\n\nAkunmu saat ini terdaftar sebagai "Pembeli".\nUntuk dapat menitipkan barang di katalog, kamu perlu mengaktifkan status Penjual.\n\nAktifkan status Penjual sekarang?`
+    );
+    if (konfirmasi) {
+      if (typeof upgradeToSeller === 'function') {
+        upgradeToSeller();
+      } else {
+        currentUser.role = 'Penjual';
+        localStorage.setItem('operin_user', JSON.stringify(currentUser));
+      }
+      openModal('modalAdd');
+    }
+    return;
+  }
+
+  // 3. Jika sudah berstatus Penjual, langsung buka form titip barang
+  openModal('modalAdd');
+}
 // Mulai aplikasi
 updateAuthButtonUI();
 loadItems();
