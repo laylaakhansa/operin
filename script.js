@@ -79,6 +79,7 @@ async function handleRegisterUser(e) {
   const majorInput = document.getElementById('regMajor').value;
   const emailInput = document.getElementById('regEmail').value.trim();
   const phoneInput = document.getElementById('regPhone').value.trim();
+  const roleInput = document.getElementById('regRole') ? document.getElementById('regRole').value : 'Penjual';
 
   if (!nameInput || !phoneInput) {
     alert('Harap lengkapi nama dan nomor WhatsApp aktif!');
@@ -94,13 +95,14 @@ async function handleRegisterUser(e) {
     phone: phoneInput
   };
 
-  // Simpan login langsung di browser
+  // Simpan login langsung di browser (termasuk role)
   currentUser = {
     name: userData.name,
     grade: userData.grade,
     major: userData.major,
     email: userData.email,
-    phone: userData.phone
+    phone: userData.phone,
+    role: roleInput
   };
   localStorage.setItem('operin_user', JSON.stringify(currentUser));
   updateAuthButtonUI();
@@ -127,14 +129,26 @@ async function loadItems() {
   grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px;">⏳ Memuat katalog perlengkapan dari database...</div>`;
 
   try {
-    const response = await fetch(APPS_SCRIPT_URL);
-    if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets");
-    allItems = await response.json();
-    renderItems();
+    const response = await fetch(APPS_SCRIPT_URL, {
+      method: "GET",
+      redirect: "follow"
+    });
+
+    const data = await response.json();
+    console.log("Data katalog:", data);
+
+    if (Array.isArray(data)) {
+      allItems = data;
+      renderItems();
+    } else {
+      throw new Error("Format respon data bukan array");
+    }
   } catch (err) {
+    console.error("Detail Error Katalog:", err);
     grid.innerHTML = `
       <div style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 40px;">
-        Gagal memuat katalog dari Google Sheets. Pastikan akses deployment Web App sudah diset ke <b>Anyone</b>.
+        Gagal memuat katalog dari Google Sheets. Pastikan akses deployment Web App sudah diset ke <b>Anyone</b>.<br>
+        <small style="color: var(--text-muted);">Error: ${err.message}</small>
       </div>`;
   }
 }
@@ -158,7 +172,9 @@ function renderItems() {
   const grid = document.getElementById('catalogGrid');
 
   let filtered = allItems.filter(item => {
-    const matchQ = (item.title || "").toLowerCase().includes(q) || (item.cod || "").toLowerCase().includes(q);
+    const title = String(item.title || "").toLowerCase();
+    const cod = String(item.cod || "").toLowerCase();
+    const matchQ = title.includes(q) || cod.includes(q);
     const matchMajor = !selectedMajor || item.major === selectedMajor;
     const matchScheme = !scheme || item.type === scheme;
     return matchQ && matchMajor && matchScheme;
@@ -187,22 +203,30 @@ function renderItems() {
     if (item.type === 'Barter') badgeClass = 'barter';
 
     const media = item.photoUrl 
-      ? `<img src="${item.photoUrl}" alt="${item.title}" class="card-img-cover" loading="lazy">`
+      ? `<img src="${item.photoUrl}" alt="${item.title || 'Barang'}" class="card-img-cover" loading="lazy">`
       : `<div class="card-emoji-box">📦</div>`;
+
+    // Pastikan nilai condition dikonversi ke string sebelum dipotong
+    let cond = item.condition;
+    if (typeof cond === 'number') {
+      cond = (cond <= 1) ? `${Math.round(cond * 100)}%` : String(cond);
+    } else {
+      cond = String(cond || 'Kondisi Baik');
+    }
 
     return `
       <div class="tilt-card-wrapper" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
         <div class="card-item-glass" onclick="openDetail('${item.id}')">
           <div class="card-media-box">
             <span class="badge-interactive-scheme ${badgeClass}">${badgeText}</span>
-            <span class="badge-interactive-cond">${item.condition ? item.condition.slice(0, 18) : 'Kondisi Baik'}</span>
+            <span class="badge-interactive-cond">${cond.slice(0, 18)}</span>
             ${media}
           </div>
           <div class="card-body-details">
-            <div class="card-major-text">${item.major}</div>
-            <div class="card-title-text" title="${item.title}">${item.title}</div>
+            <div class="card-major-text">${item.major || '-'}</div>
+            <div class="card-title-text" title="${item.title || ''}">${item.title || 'Tanpa Judul'}</div>
             <div class="card-price-text">${item.type === 'Barter' ? 'Barter' : item.price}</div>
-            <div class="card-cod-row">📍 ${item.cod}</div>
+            <div class="card-cod-row">📍 ${item.cod || '-'}</div>
           </div>
         </div>
       </div>
@@ -253,18 +277,25 @@ function openDetail(id) {
 
   activeDetailItem = item;
 
-  document.getElementById('detTitle').innerText = item.title;
-  document.getElementById('detMajor').innerText = item.major;
-  document.getElementById('detScheme').innerText = item.type;
+  let cond = item.condition;
+  if (typeof cond === 'number') {
+    cond = (cond <= 1) ? `${Math.round(cond * 100)}%` : String(cond);
+  } else {
+    cond = String(cond || 'Kondisi Baik');
+  }
+
+  document.getElementById('detTitle').innerText = item.title || '-';
+  document.getElementById('detMajor').innerText = item.major || '-';
+  document.getElementById('detScheme').innerText = item.type || '-';
   document.getElementById('detPrice').innerText = item.type === 'Barter' ? 'Skema Barter' : item.price;
   document.getElementById('detSize').innerText = item.size || '-';
-  document.getElementById('detCondition').innerText = item.condition || 'Kondisi Baik';
+  document.getElementById('detCondition').innerText = cond;
   document.getElementById('detMinus').innerText = item.minus || 'Tidak ada';
-  document.getElementById('detCod').innerText = '📍 ' + item.cod;
+  document.getElementById('detCod').innerText = '📍 ' + (item.cod || '-');
 
   const mediaBox = document.getElementById('detMediaBox');
   if (item.photoUrl) {
-    mediaBox.innerHTML = `<img src="${item.photoUrl}" alt="${item.title}" style="width:100%;height:220px;object-fit:cover;border-radius:14px;">`;
+    mediaBox.innerHTML = `<img src="${item.photoUrl}" alt="${item.title || 'Barang'}" style="width:100%;height:220px;object-fit:cover;border-radius:14px;">`;
   } else {
     mediaBox.innerHTML = `<div style="height:180px;display:flex;align-items:center;justify-content:center;font-size:4rem;background:rgba(0,0,0,0.03);border-radius:14px;">📦</div>`;
   }
@@ -365,7 +396,7 @@ async function submitNewItem(e) {
     
     setTimeout(() => {
       loadItems();
-    }, 1200);
+    }, 1500);
   } catch (err) {
     alert('Gagal menghubungi database Google Sheets.');
   }
@@ -396,35 +427,30 @@ function sendChat() {
     logs.scrollTop = logs.scrollHeight;
   }, 500);
 }
+
 // Fungsi pembuka modal Titip Barang dengan proteksi akun
 function handleOpenAddModal() {
-  // 1. Cek apakah pengguna sudah login
   if (!currentUser) {
     alert('Silakan daftar atau masuk akun terlebih dahulu sebelum menitipkan barang!');
     openModal('modalAuth');
     return;
   }
 
-  // 2. Cek apakah role akun adalah Penjual
   if (currentUser.role !== 'Penjual') {
     const konfirmasi = confirm(
       `Halo ${currentUser.name}!\n\nAkunmu saat ini terdaftar sebagai "Pembeli".\nUntuk dapat menitipkan barang di katalog, kamu perlu mengaktifkan status Penjual.\n\nAktifkan status Penjual sekarang?`
     );
     if (konfirmasi) {
-      if (typeof upgradeToSeller === 'function') {
-        upgradeToSeller();
-      } else {
-        currentUser.role = 'Penjual';
-        localStorage.setItem('operin_user', JSON.stringify(currentUser));
-      }
+      currentUser.role = 'Penjual';
+      localStorage.setItem('operin_user', JSON.stringify(currentUser));
       openModal('modalAdd');
     }
     return;
   }
 
-  // 3. Jika sudah berstatus Penjual, langsung buka form titip barang
   openModal('modalAdd');
 }
+
 // Mulai aplikasi
 updateAuthButtonUI();
 loadItems();
